@@ -6,10 +6,10 @@ namespace lab02_Collection_and_Generic_Part_2
     {
         static void Main(string[] args)
         {
-            AccountList accountList= new();
+            AccountList accountList = new();
             while (true)
             {
-                Console.WriteLine("Enter Add/Save/Load/Report/Remove/Exit");
+                Console.WriteLine("Enter Add/Save/Load/Report/Remove/SortByAccountID/SortByBalance/SortByFirstName/Exit");
                 string choice = Console.ReadLine().ToUpper();
                 switch (choice)
                 {
@@ -27,6 +27,15 @@ namespace lab02_Collection_and_Generic_Part_2
                         break;
                     case "REMOVE":
                         accountList.Remove();
+                        break;
+                    case "SORTBYACCOUNTID":
+                        accountList.SortByAccountIDAsc();
+                        break;
+                    case "SORTBYBALANCE":
+                        accountList.SortByBalanceAsc();
+                        break;
+                    case "SORTBYFIRSTNAME":
+                        accountList.SortByFirstNameAsc();
                         break;
                     case "EXIT":
                         return;

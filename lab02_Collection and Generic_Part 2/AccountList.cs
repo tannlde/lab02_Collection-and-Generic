@@ -1,9 +1,35 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace lab02_Collection_and_Generic_Part_2
 {
+    class SortByFirstNameAsc : IComparer
+    {
+        public int Compare(object x, object y) => (x as Account).FirstName.CompareTo((y as Account).FirstName);
+    }
+
+    class SortByBalanceAsc : IComparer
+    {
+        public int Compare(object x, object y)
+        {
+            double b1 = (x as Account).Balance;
+            double b2 = (y as Account).Balance;
+            if (b1 > b2) return 1;
+            if (b1 < b2) return -1;
+            return 0;
+        }
+    }
+
+    class SortByAccountIDAsc : IComparer
+    {
+        public int Compare(object x, object y)
+        {
+            return (x as Account).AccountID.CompareTo((y as Account).AccountID);
+        }
+    }
+
     class AccountList
     {
         private ArrayList Accounts = new();
@@ -21,19 +47,12 @@ namespace lab02_Collection_and_Generic_Part_2
             string fileName = Console.ReadLine();
             try
             {
-                FileStream ouput = new(fileName, FileMode.CreateNew, FileAccess.Write);
-                Console.WriteLine(Path.GetFullPath(fileName));
-                StreamWriter writer = new(ouput);
-
-                foreach (var item in Accounts)
-                {
-
-                    writer.WriteLine((item as Account).ToString());
-                }
-                writer.Close();
-                ouput.Close();
+                BinaryFormatter bf = new();
+                FileStream output = new(fileName, FileMode.CreateNew, FileAccess.Write);
+                bf.Serialize(output, Accounts);
+                output.Close();
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
@@ -46,20 +65,12 @@ namespace lab02_Collection_and_Generic_Part_2
             Accounts.Clear();
             try
             {
+                BinaryFormatter bf = new();
                 FileStream input = new(fileName, FileMode.Open, FileAccess.Read);
-                StreamReader reader = new(input);
-
-                string str;
-                while ((str = reader.ReadLine()) != null)
-                {
-                    string[] list = str.Split(',');
-                    Account acc = new(list[0].Trim(), double.Parse(list[3].Trim()), list[1].Trim(), list[2].Trim());
-                    Accounts.Add(acc);
-                }
-                reader.Close();
+                Accounts = (ArrayList)bf.Deserialize(input);
                 input.Close();
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
@@ -75,7 +86,7 @@ namespace lab02_Collection_and_Generic_Part_2
 
         public void Remove()
         {
-            AccountComparer ac = new();
+            SortByAccountIDAsc ac = new();
             Accounts.Sort(ac);
             Console.Write("Enter Account ID to remove: ");
             string accID = Console.ReadLine();
@@ -86,6 +97,20 @@ namespace lab02_Collection_and_Generic_Part_2
                 Accounts.RemoveAt(pos);
                 Console.WriteLine("Removed");
             }
+        }
+        public void SortByFirstNameAsc()
+        {
+            Accounts.Sort(new SortByFirstNameAsc());
+        }
+
+        public void SortByBalanceAsc()
+        {
+            Accounts.Sort(new SortByBalanceAsc());
+        }
+
+        public void SortByAccountIDAsc()
+        {
+            Accounts.Sort(new SortByAccountIDAsc());
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace lab02_Collection_and_Generic_Part_2
 {
+    [Serializable]
     class Account
     {
         private string accountID;
