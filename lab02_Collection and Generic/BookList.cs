@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace lab02_Collection_and_Generic
 {
     class BookList
     {
-        private ArrayList list = new ArrayList();
+        private ArrayList list = new();
 
         public void AddBook()
         {

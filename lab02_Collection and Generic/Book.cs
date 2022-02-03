@@ -11,7 +11,7 @@ namespace lab02_Collection_and_Generic
         private string publisher;
         private int year;
 
-        private ArrayList chapter = new ArrayList();
+        private ArrayList chapter = new();
         public string this[int index]
         {
             get
